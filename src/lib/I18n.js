@@ -81,7 +81,7 @@ export default {
     let replaced = translation;
     if (typeof translation === 'string') {
       Object.keys(replacements).forEach((replacement) => {
-        replaced = replaced.split(`%{${replacement}}`).join(replacements[replacement]);
+        replaced = replaced.split(`{{${replacement}}}`).join(replacements[replacement]);
       });
       return replaced;
     }

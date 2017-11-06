@@ -13,11 +13,11 @@ describe('Translate.jsx', () => {
       en : {
         application : {
           title : 'Awesome app with i18n!',
-          hello : 'Hello, %{name}!'
+          hello : 'Hello, {{name}}!'
         },
-        export      : 'Export %{count} items',
+        export      : 'Export {{count}} items',
         export_0    : 'Nothing to export',
-        export_1    : 'Export %{count} item',
+        export_1    : 'Export {{count}} item',
         two_lines   : 'Line 1<br />Line 2'
       }
     });

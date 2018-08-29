@@ -1,17 +1,17 @@
+/* eslint global-require: "off" */
+/* eslint no-console: "off" */
+
+import IntlPolyfill from 'intl';
 import moment from 'moment';
 import 'moment/min/locales';
-import IntlPolyfill from 'intl';
-import formatMissingTranslation from './formatMissingTranslation';
 import BaseComponent from './Base';
-
-const handleMissingTranslation = formatMissingTranslation;
 
 export default {
   _localeKey: 'en',
   _translationsObject: {},
   _getTranslations: null,
   _getLocale: null,
-  _handleMissingTranslation: handleMissingTranslation,
+  _handleMissingTranslation: text => text.split('.').pop(),
 
   get _translations() {
     return this._getTranslations ? this._getTranslations() : this._translationsObject;
@@ -43,10 +43,8 @@ export default {
     }
   },
 
-  /**
-   * @deprecated
-   */
   loadTranslations(translations) {
+    console.error('I18n.loadTranslations is deprecated, please use I18n.setTranslations instead');
     this.setTranslations(translations);
   },
 
@@ -69,6 +67,7 @@ export default {
     }
     this._handleMissingTranslation = fn;
   },
+
   t(key, replacements = {}) {
     return this._translate(key, replacements);
   },
@@ -78,17 +77,21 @@ export default {
   },
 
   _replace(translation, replacements) {
-    let replaced = translation;
     if (typeof translation === 'string') {
+      let result = translation;
       Object.keys(replacements).forEach((replacement) => {
-        replaced = replaced.split(`{{${replacement}}}`).join(replacements[replacement]);
+        result = result.split(`{{${replacement}}}`).join(replacements[replacement]);
       });
-      return replaced;
+      return result;
     }
-    Object.keys(replaced).forEach((translationKey) => {
-      replaced[translationKey] = this._replace(replaced[translationKey], replacements);
-    });
-    return replaced;
+    if (typeof translation === 'object') {
+      const result = {};
+      Object.keys(translation).forEach((translationKey) => {
+        result[translationKey] = this._replace(translation[translationKey], replacements);
+      });
+      return result;
+    }
+    return null;
   },
 
   _translate(key, replacements = {}) {

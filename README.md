@@ -5,8 +5,6 @@ Simple i18n translation and localization components and helpers for React applic
 
 A working example of this package can be found [here at RunKit](https://runkit.com/npm/react-i18nify).
 
-If you're using Redux or Fluxible, feel free to use [react-redux-i18n](https://github.com/zoover/react-redux-i18n) or [react-fluxible-i18n](https://github.com/zoover/react-fluxible-i18n) instead.
-
 ## Table of contents
 
 * [Installation](#installation)
@@ -28,7 +26,7 @@ $ npm i --save react-i18nify
 Start by loading setting translations and locale to be used:
 
 ```javascript
-const I18n = require('react-i18nify').I18n;
+const { I18n } = require('react-i18nify');
 
 I18n.setTranslations({
   en: {
@@ -66,51 +64,57 @@ Now you're all set up to start unleashing the power of `react-i18nify`!
 
 ## Components
 
-The easiest way to translate or localize in your React components is by using the `Translate` and `Localize` components:
+The easiest way to translate or localize in your React application is by using the `Translate` and `Localize` components:
 
 ```javascript
-const React = require('react');
-const Translate = require('react-i18nify').Translate;
-const Localize = require('react-i18nify').Localize;
+const { Translate, Localize } = require('react-i18nify');
 
-const AwesomeComponent = () => (
-  <div>
-    <Translate value="application.title"/>
-      // => returns '<span>Toffe app met i18n!</span>' for locale 'nl'
-    <Translate value="application.title" style={{ fontWeight: 'bold', fontSize: '14px' }} />
-    // => returns '<span style="font-weight:bold;font-size:14px;">Toffe app met i18n!</span>' for locale 'nl'
-    <Translate value="application.hello" name="Aad"/>
-      // => returns '<span>Hallo, Aad!</span>' for locale 'nl'
-    <Localize value="2015-09-03" dateFormat="date.long"/>
-      // => returns '<span>3 september 2015</span> for locale 'nl'
-    <Localize value={10/3} options={{style: 'currency', currency: 'EUR', minimumFractionDigits: 2, maximumFractionDigits: 2}}/>
-      // => returns '<span>€ 3,33</span> for locale 'nl'
-    <Translate value="export" count={1} />
-      // => returns '<span>Exporteer 1 ding</span> for locale 'nl'
-    <Translate value="export" count={2} />
-      // => returns '<span>Exporteer 2 dingen</span> for locale 'nl'
-    <Translate value="two_lines" dangerousHTML />
-      // => returns '<span>Regel 1<br />Regel 2</span>'
-  </div>
-);
+<Translate value="application.title" />
+  // => <span>Toffe app met i18n!</span>
+<Translate value="application.title" style={{ fontWeight: 'bold', fontSize: '14px' }} />
+  // => <span style="font-weight:bold;font-size:14px;">Toffe app met i18n!</span>
+<Translate value="application.hello" name="Aad" />
+  // => <span>Hallo, Aad!</span>
+<Translate value="export" count={1} />
+  // => <span>Exporteer 1 ding</span>
+<Translate value="export" count={2} />
+  // => <span>Exporteer 2 dingen</span>
+<Translate value="two_lines" dangerousHTML />
+  // => <span>Regel 1<br />Regel 2</span>
+<Translate value="application.title" tag="h1" />
+ // => <h1>Toffe app met i18n!</h1>
+
+<Localize value="2015-09-03" dateFormat="date.long" />
+  // => <span>3 september 2015</span>
+<Localize value="2015-09-03" dateFormat="date.long" tag="div" />
+  // => <div>3 september 2015</div>
+<Localize value={10/3} options={{style: 'currency', currency: 'EUR', minimumFractionDigits: 2, maximumFractionDigits: 2}} />
+  // => <span>€ 3,33</span>
 ```
 
 ## Helpers
 
 If for some reason, you cannot use the components, you can use the `I18n.t` and `I18n.l` helpers instead.
-These helpers however will not be re-rendered automatically in any way, so if you use those, it's up to handle state change.
+These helpers however will not be re-rendered automatically in any way, so if you use those, it's up to you to handle state change.
 
 ```javascript
-const I18n = require('react-i18nify').I18n;
+const { I18n } = require('react-i18nify');
 
-I18n.t('application.title'); // => returns 'Toffe app met i18n!' for locale 'nl'
-I18n.t('application.hello', {name: 'Aad'}); // => returns 'Hallo, Aad!' for locale 'nl'
-I18n.t('export', {count: 0}); // => returns 'Niks te exporteren' for locale 'nl'
-I18n.t('application.unknown_translation'); // => returns 'Unknown Translation' as translation is missing
-I18n.t('application', {name: 'Aad'}); // => returns {hello: "Hallo, Aad!", title: "Toffe app met i18n!"} for locale 'nl'
+I18n.t('application.title');
+  // => Toffe app met i18n!
+I18n.t('application.hello', {name: 'Aad'});
+  // => Hallo, Aad!'
+I18n.t('export', {count: 0});
+  // => Niks te exporteren
+I18n.t('application.unknown_translation');
+  // => unknown_translation
+I18n.t('application', {name: 'Aad'});
+  // => {hello: 'Hallo, Aad!', title: 'Toffe app met i18n!'}
 
-I18n.l(1385856000000, { dateFormat: 'date.long' }); // => returns '1 december 2013' for locale 'nl'
-I18n.l(Math.PI, { maximumFractionDigits: 2 }); // => returns '3,14' for locale 'nl'
+I18n.l(1385856000000, { dateFormat: 'date.long' });
+  // => 1 december 2013
+I18n.l(Math.PI, { maximumFractionDigits: 2 });
+  // => 3,14
 ```
 
 ## API Reference
@@ -134,7 +138,7 @@ This behavior can be prevented by providing `false` as a second argument.
 Alternatively to using `setLocale`, you can provide a callback to return the locale with `setLocaleGetter`:
 
 ```javascript
-const I18n = require('react-i18nify').I18n;
+const { I18n } = require('react-i18nify');
 
 const locale = () => 'nl';
 
@@ -146,7 +150,7 @@ I18n.setLocaleGetter(locale);
 Alternatively to using `setTranslations`, you can provide a callback to return the translations with `setTranslationsGetter`:
 
 ```javascript
-const I18n = require('react-i18nify').I18n;
+const { I18n } = require('react-i18nify');
 
 const translation = () => ({
   en: { ... },
@@ -163,13 +167,14 @@ as can be seen in the `I18n.t('application.unknown_translation');` example above
 You can however overwrite this behavior by setting a function to handle missing translations.
 
 ```javascript
-const I18n = require('react-i18nify').I18n;
+const { I18n } = require('react-i18nify');
 
 const myHandleMissingTranslation = (key, replacements) => `Missing translation: ${key}`;
 
 I18n.setHandleMissingTranslation(myHandleMissingTranslation);
 
-I18n.t('application.unknown_translation'); // => returns 'Missing translation: application.unknown_translation'
+I18n.t('application.unknown_translation');
+  // => Missing translation: application.unknown_translation
 ```
 
 #### `t(key, replacements = {})`
@@ -202,11 +207,15 @@ The translation key to translate.
 
 #### `dangerousHTML` (bool)
 
-If `true`, HTML is allowed in the translation.
+If `true`, HTML is allowed in the translation. Defaults to `false`.
 
 #### `className` (string)
 
 Optional CSS classname.
+
+#### `tag` (string|func)
+
+HTML element to render the translation in. Defaults to `span`.
 
 #### `style` (object)
 
@@ -220,7 +229,7 @@ All other provided props will be used as replacements for the translation.
 
 React localize component, with the following props:
 
-#### `value` (number/string/object)
+#### `value` (number|string|object)
 
 The number or date to localize.
 
@@ -238,11 +247,15 @@ For the full list of options, see https://developer.mozilla.org/en/docs/Web/Java
 
 #### `dangerousHTML` (bool)
 
-If `true`, HTML is allowed in the translation.
+If `true`, HTML is allowed in the localization. Defaults to `false`.
 
 #### `className` (string)
 
 Optional CSS classname.
+
+#### `tag` (string|func)
+
+HTML element to render the localization in. Defaults to `span`.
 
 #### `style` (object)
 
